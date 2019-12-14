@@ -1,0 +1,436 @@
+<!-- 52957 Data representation -->
+<!-- Big project 2019 -->
+<!-- shopperx.html-->
+
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+    
+        body {
+            margin: 0;
+        }
+            
+        /* Style the header */
+        .header {
+            background-color: #f1f1f1;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Create three equal columns that floats next to each other */
+        .column {
+            float: left;
+            width: 33.33%;
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /* Responsive layout - makes the three columns stack on top of each other instead of next to each other on smaller screens (600px wide or less) */
+        @media screen and (max-width: 600px) {
+        .column {
+            width: 100%;
+            }
+        }
+
+        
+
+        /* Style the footer */
+        .footer {
+            background-color: #f1f1f1;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+    
+    <head>
+        <title>Shopping</title>
+
+        <!--Include BootstrapCSS only, spreads content more across width of page-->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        <!--link to JQuery in here-->
+        <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+
+    </head>
+
+    <body>
+        <div class="header">
+        <h1>Food database</h1>
+        <!--the Foods section-->
+        <!-- Add an image, maybe more/position? -->
+        <img src="images/istock_trolley.jpg" alt="Trolley in a supermarket" style="width:300px;height:155px;">
+        </div>    
+
+        <!--<div>-->
+
+<!-- Make two columns, thin on left -->
+<div class="row">
+    <!-- Col 1 -->
+    <div class="column">
+        <h2><span textalign="center">Create a new food</span>
+        
+        <!--<button id="showCreateButton" class="btn btn-default" onclick="showCreate()">Create</button>-->
+        <button id="showCreateButton" type="button" class="btn btn-primary btn-lg" onclick="showCreate()">Create</button>
+    </div>
+    
+    <!-- Col2 for form and table -->
+    <div class="column">
+
+    <!--List all the foods - will load from server/DB later-->
+        <div> <!--class="table-responsive"-->
+            <table class="table table" id="foodTable">
+                <h2><span id="tableTitle">All Foods</span></h2>
+                <tr>
+                    <th>id</th>  <!-- maybe don't display id? -->
+                    <th>Category</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                </tr>
+                <!-- blank table to start-->
+            </table>
+        </div>
+
+        <!-- Update & Create section fancier Bootstrap form -->
+        <form>
+            <!-- Hide the form initially -->
+            <div id='createUpdateForm' style="display:none">
+            <h2><span id="createLabel" style="color: blue">Create</span> <span id="updateLabel"style="color: green">Update</span> Food</h2>
+            
+            <!-- id field is hidden -->
+            <div class="form-group">
+                <input type="hidden" name="id"/>
+            </div>
+            
+            <!-- Category part of form -->
+            <div class="form-group">
+              <label for="formInputCategory">Category</label>
+              <select type="text" class="form-control" id="formInputCategory" placeholder="Category">
+                    <option value="dairy">dairy</option>
+                    <option value="vegetable">vegetable</option>
+                    <option value="meat">meat</option>
+                    <option value="canned">canned</option>
+                    </select><br/>
+            </div>
+            
+            <!-- Name part of form -->
+            <div class="form-group">
+              <label for="formInputName">Name</label>
+              <input type="text" class="form-control" id="formInputName" placeholder="Name">
+            </div>
+            
+            <!-- Price part of form -->
+            <div class="form-group">
+                <label for="formInputPrice">Price</label>
+                <input type="number" class="form-control" id="formInputPrice" placeholder="Price">
+                <p class="help-block">Please enter attributes of item.</p>
+            </div>
+            <!-- Create and update buttons -->
+            <button id="doCreateButton" type="button" class="btn btn-primary" onclick="doCreate()">Create</button>
+            <button id="doUpdateButton" type="button" class="btn btn-success" onclick="doUpdate()">Update</button>
+            
+            </div>
+        </form>
+
+    </div> <!-- End of Col 2-->
+</div> <!-- End of columns -->
+        
+
+<div class="footer">
+    <p>52957 Data Representation project</p>
+</div>
+
+        <!-- JavaScript goes here -->
+        <script>
+
+        function showCreate(){
+            // When creating a new food:
+            // Hide showCreateButton & foodTable & tableTitle, show createUpdateForm
+            document.getElementById('showCreateButton').style.display="none"
+            document.getElementById('foodTable').style.display="none"
+            document.getElementById('createUpdateForm').style.display="block"
+            document.getElementById('tableTitle').style.display="none"
+
+            // Show createLabel above form, hide updateLabel
+            document.getElementById('createLabel').style.display="inline"
+            document.getElementById('updateLabel').style.display="none"
+
+            // Show doCreateButton under form, hide doUpdateButton
+            document.getElementById('doCreateButton').style.display="block"
+            document.getElementById('doUpdateButton').style.display="none"
+        }
+
+        function showViewAll(){
+            document.getElementById('showCreateButton').style.display="block"
+            document.getElementById('foodTable').style.display="block"
+            document.getElementById('createUpdateForm').style.display="none"
+        }
+
+        function showUpdate(buttonElement){
+            document.getElementById('tableTitle').style.display="none"
+            document.getElementById('showCreateButton').style.display="none"
+            document.getElementById('foodTable').style.display="none"
+            document.getElementById('createUpdateForm').style.display="block"
+            document.getElementById('createLabel').style.display="none"
+            document.getElementById('updateLabel').style.display="inline"
+            document.getElementById('doCreateButton').style.display="none"
+            document.getElementById('doUpdateButton').style.display="block"
+            var rowElement = buttonElement.parentNode.parentNode
+            // these is a way of finding the closest <tr> which would safer, closest()
+        
+            var food = getFoodFromRow(rowElement)
+            populateFormWithFood(food)
+        }
+
+        function doCreate(){
+            console.log("inside doCreate in form")
+            var form = document.getElementById('createUpdateForm')
+            var food = {}
+            
+            // id created by DB
+            food.Category = form.querySelector('select[placeholder="Category"]').value
+            //food.Category = form.querySelector('select[name="Category"]').value
+            food.Name = form.querySelector('input[placeholder="Name"]').value
+            //food.Name = form.querySelector('input[name="Name"]').value
+
+            food.Price = form.querySelector('input[placeholder="Price"]').value
+            //food.Price = form.querySelector('input[name="Price"]').value
+
+            console.log(JSON.stringify(food))
+
+            // ajax POST to server here.
+            ////////////////////////////////////////////////////////////////
+            createFoodAjax(food)
+        }
+
+        function doUpdate(){
+            // calls getFoodFromForm and setFoodInRow
+            console.log("inside doUpdate")
+            var food = getFoodFromForm();
+            var rowElement = document.getElementById(food.id);
+
+            // ajax PUT to server here.
+            ////////////////////////////////////////////////////////////////
+            console.log("updateFood on server now - ajax PUT next line")
+            console.log(JSON.stringify(food));
+            updateFoodAjax(food);
+                
+            setFoodInRow(rowElement, food); //table is being updated
+            clearForm()
+            showViewAll()
+        }
+            
+        function doDelete(r){
+            console.log("delete button in table has been clicked")
+            var tableElement = document.getElementById('foodTable');
+            var rowElement = r.parentNode.parentNode;
+            var index = rowElement.rowIndex;
+
+            // ajax DELETE from server here.
+            ////////////////////////////////////////////////////////////////
+            deleteFoodAjax(rowElement.getAttribute("id"));
+
+            tableElement.deleteRow(index); // table is being updated
+        }
+            
+        function addFoodToTable(food){
+            var tableElement = document.getElementById('foodTable')
+            var rowElement = tableElement.insertRow(-1)
+            rowElement.setAttribute('id',food.id)
+            var cell1 = rowElement.insertCell(0);
+            cell1.innerHTML = food.id
+            var cell2 = rowElement.insertCell(1);
+            cell2.innerHTML = food.Category
+            var cell3 = rowElement.insertCell(2);
+            cell3.innerHTML = food.Name
+            var cell4 = rowElement.insertCell(3);
+            cell4.innerHTML = parseFloat(food.Price).toFixed(2) // Want table to display price to two decimal places.
+            var cell5 = rowElement.insertCell(4);
+            cell5.innerHTML = '<button type="button" class="btn btn-success" onclick="showUpdate(this)">Update</button>'
+            var cell6 = rowElement.insertCell(5);
+            cell6.innerHTML = '<button  type="button" class="btn btn-danger"onclick=doDelete(this)>Delete</button>'
+        }
+
+        function clearForm(){
+            var form = document.getElementById('createUpdateForm')
+            form.querySelector('select[placeholder="Category"]').value=''
+            form.querySelector('input[placeholder="Name"]').value=''
+            form.querySelector('input[placeholder="Price"]').value=''
+            //form.querySelector('select[name="Category"]').value=''
+            //form.querySelector('input[name="Name"]').value=''
+            //form.querySelector('input[name="Price"]').value=''
+        }
+
+        function getFoodFromRow(rowElement){
+            // Take a row el and return a food object
+            console.log("inside getFoodFromRow")
+            var food = {}
+            //food.id = rowElement.cells[0].firstChild.textContent
+            food.id = rowElement.getAttribute('id')
+            food.Category = rowElement.cells[1].firstChild.textContent
+            food.Name = rowElement.cells[2].firstChild.textContent
+            // Price in DB is decimal(6,2)
+            food.Price = parseFloat(rowElement.cells[3].firstChild.textContent)
+            return food
+            console.log(food)
+        }
+
+        function setFoodInRow(rowElement, food){
+            // Take food and rowEl and pop the row with the food
+            rowElement.cells[0].firstChild.textContent= food.id
+            rowElement.cells[1].firstChild.textContent= food.Category
+            rowElement.cells[2].firstChild.textContent= food.Name
+            rowElement.cells[3].firstChild.textContent= parseFloat(food.Price).toFixed(2)
+        }
+
+        function populateFormWithFood(food){
+            var form = document.getElementById('createUpdateForm')
+            
+            form.querySelector('input[name="id"]').disabled = true
+            form.querySelector('input[name="id"]').value = food.id
+
+            form.querySelector('select[placeholder="Category"]').value = food.Category
+            form.querySelector('input[placeholder="Name"]').value = food.Name
+            form.querySelector('input[placeholder="Price"]').value = food.Price
+            //form.querySelector('select[name="Category"]').value = food.Category
+            //form.querySelector('input[name="Name"]').value = food.Name
+            //form.querySelector('input[name="Price"]').value = food.Price
+        }
+
+        function getFoodFromForm(){
+            // Return a food from the form
+            console.log("in getFoodFromForm")
+            var form = document.getElementById('createUpdateForm')
+            var food = {}
+            food.id = form.querySelector('input[name="id"]').value
+            food.Category = form.querySelector('select[placeholder="Category"]').value
+            food.Name = form.querySelector('input[placeholder="Name"]').value
+            
+            //food.Category = form.querySelector('select[name="Category"]').value
+            //food.Name = form.querySelector('input[name="Name"]').value
+            
+            // parseInt(string, radix)
+            //food.Price = parseInt(form.querySelector('input[name="Price"]').value,10)
+            
+            // parseFloat(string)
+            // My price is a decimal(6.2) now as defined in DB.
+            //.toFixed(2)
+            
+            food.Price = parseFloat(form.querySelector('input[placeholder="Price"]').value).toFixed(2)
+            //food.Price = parseFloat(form.querySelector('input[name="Price"]').value).toFixed(2)
+            console.log(JSON.stringify(food))
+            return food
+        }  
+        
+        // AJAX functions below.
+        /////////////////////////////////////////////////////////////////////////
+        
+        // Dynamically find the host
+        host = window.location.origin
+
+        function getAllAjax(){
+            console.log("inside getAllAjax fn")
+            $.ajax({
+                "url": host+"/foods",
+                //"url": "http://127.0.0.1:5000/foods",
+                "method":"GET",
+                "data":"",
+                "dataType": "JSON",
+                "success":function(result){
+                    //console.log(result);
+                    for (food of result){
+                        addFoodToTable(food);
+                    }
+                },
+                "error":function(xhr,status,error){
+                    console.log("error: "+status+" msg:"+error);
+                }
+            });
+        }
+        
+        /////////////////////////////////////////////////////////////////////////
+        getAllAjax(); // Fill table with data from DB
+
+        /////////////////////////////////////////////////////////////////////////
+        function createFoodAjax(food){
+            console.log("inside createFoodAjax fn")
+            console.log(JSON.stringify(food));
+            $.ajax({
+                "url": host+"/foods",
+                //"url": "http://127.0.0.1:5000/foods",
+                "method":"POST",
+                "data":JSON.stringify(food),
+                "dataType": "JSON",
+                contentType: "application/json; charset=utf-8",
+                "success":function(result){
+                    console.log(result);
+                    food.id = result.id
+
+                    // Update web page after DB
+                    addFoodToTable(food)
+                    clearForm()
+                    showViewAll()
+                },
+                "error":function(xhr,status,error){
+                    console.log("error: "+status+" msg:"+error);
+                }
+            });
+        }
+
+        /////////////////////////////////////////////////////////////////////////
+        function updateFoodAjax(food){
+            console.log("inside updateFoodAjax fn")
+            console.log(JSON.stringify(food));
+            $.ajax({
+                "url": host+"/foods/"+encodeURI(food.id),
+                //"url": "http://127.0.0.1:5000/foods/"+encodeURI(food.id),
+                "method":"PUT",
+                "data":JSON.stringify(food),
+                "dataType": "JSON",
+                contentType: "application/json; charset=utf-8",
+                "success":function(result){
+                    // console.log(result);
+                  
+                },
+                "error":function(xhr,status,error){
+                    console.log("error: "+status+" msg:"+error);
+                }
+            });
+        }
+
+        /////////////////////////////////////////////////////////////////////////
+        function deleteFoodAjax(id){
+                console.log("inside deleteFoodAjax fn")
+                console.log(JSON.stringify("food to delete:"+id));
+
+                $.ajax({
+                    "url": host+"/foods/"+encodeURI(id),
+                    //"url": "http://127.0.0.1:5000/foods/"+encodeURI(id),
+                    "method": "DELETE",
+                    "data": "",
+                    "dataType": "JSON",
+                    contentType: "application/json; charset=utf-8",
+                    "success": function(result){
+                        console.log(result);
+                    },
+                    "error": function(xhr, status,error){
+                        console.log("error:"+status+" message:"+error);
+                    }
+                });                
+             }
+        </script>
+
+    </body>
+
+</html>

@@ -11,19 +11,19 @@
 
 <script>
 host = window.location.origin
-    $.ajax({
-            "url": host+"/books/1",
-            "method": "GET",
-            "data": "",
-            "dataType": "JSON",
-            "success": function(result){
-                console.log(result);
-                        },
-                "error": function(xhr, status,error){
-                    console.log("error:"+status+" message:"+error);
-                }
-
+$.ajax({
+        "url": host+"/books/1",
+        "method": "GET",
+        "data": "",
+        "dataType": "HTML",
+        "success": function (result) {
+            console.log(result);
+        },
+        "error": function (xhr, status, error) {
+            console.log("error: " + status + " msg:" + error);
+        }
         });
+console.log(host)
 
 
 </script>

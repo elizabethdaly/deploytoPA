@@ -1,0 +1,32 @@
+<!-- testhtml.html -->
+
+<html>
+
+<head>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+    <title>Test the server</title>
+</head>
+
+<body>This is a test</body>
+
+<script>
+host = window.location.origin
+    $.ajax({
+            "url": host+"/books/1",
+            "method": "GET",
+            "data": "",
+            "dataType": "JSON",
+            "success": function(result){
+                console.log(result);
+                        };
+                },
+                "error": function(xhr, status,error){
+                    console.log("error:"+status+" message:"+error);
+                }
+
+        });
+
+
+</script>
+
+</html>

@@ -12,39 +12,29 @@ import dbconfig as cfg
 # Change class name here
 class FoodDAO:
     db = ""
-    
-    #def __init__(self):
-    def connectToDB(self):
+    def __init__(self):
         self.db = mysql.connector.connect(
+        #host = "localhost",
+        #user = "root",
+        #password = "root",
+        #database = "datarepresentation"
         host = cfg.mysql['host'],
         user = cfg.mysql['user'],
         password = cfg.mysql['password'],
         database = cfg.mysql['database']
         )
-    
-    def __init__(self):
-        self.connectToDB()
-
-    # Check for cnxn, if none make one.
-    def getCursor(self):
-        if not self.db.is_connected():
-            self.connectToDB()
-        return self.db.cursor()
-
 
     def create(self, values):
-        cursor = self.getCursor()
+        cursor = self.db.cursor()
         sql = "insert into food (category, name, price) values (%s, %s, %s)"
         cursor.execute(sql, values)
 
         self.db.commit()
-        lastRowID = cursor.lastrowid
-        cursor.close()
-        return lastRowID
+        return cursor.lastrowid
         print("create done")
 
     def getAll(self):
-        cursor = self.getCursor()
+        cursor = self.db.cursor()
         sql = "select * from food"
         cursor.execute(sql)
         results = cursor.fetchall()
@@ -55,41 +45,37 @@ class FoodDAO:
         for result in results:
             print(result)
             returnArray.append(self.convertToDictionary(result))
-        cursor.close()
+
         return returnArray
         print("get all done")
 
     def findByID(self, id):
-        cursor = self.getCursor()
+        cursor = self.db.cursor()
         sql = "select * from food where id = %s"
         values = (id, )
 
         cursor.execute(sql, values)
         result = cursor.fetchone()
-        # Format what comes back from db
-        food = self.convertToDictionary(result)
 
-        cursor.close()  
-        return food
+        # Format what comes back from db
+        return self.convertToDictionary(result)
 
     def update(self, values):
-        cursor = self.getCursor()
+        cursor = self.db.cursor()
         sql = "update food set category = %s, name = %s, price = %s where id = %s"
         
         cursor.execute(sql, values)
         self.db.commit()
         print("update done")
-        cursor.close()
 
     def delete(self, id):
-        cursor = self.getCursor()
+        cursor = self.db.cursor()
         sql = "delete from food where id = %s"
         values = (id, )
 
         cursor.execute(sql, values)
         self.db.commit()
         print("delete done for id", id)
-        cursor.close()
 
     # Converting tuple returned from DB into dict
     def convertToDictionary(self, result):
